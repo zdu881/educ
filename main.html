@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计算机操作系统、进程与线程、环境变量介绍</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Prism.js for code highlighting -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8fafc; /* Light blue-gray background */
+        color: #334155; /* Dark slate text */
+      }
+      h1,
+      h2,
+      h3 {
+        color: #1e293b; /* Darker text for headings */
+      }
+      /* Custom scrollbar for better aesthetics */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #e2e8f0;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
+      }
+      /* Ensure code blocks are readable */
+      pre {
+        white-space: pre-wrap; /* Allows long lines to wrap */
+        word-break: break-all; /* Breaks words if necessary */
+      }
+      /* Style for Table of Contents */
+      .toc a {
+        transition: color 0.2s ease-in-out;
+      }
+      .toc a:hover {
+        color: #4f46e5; /* Indigo color on hover */
+      }
+    </style>
+  </head>
+  <body class="p-4 sm:p-8 md:p-12 lg:p-16">
+    <div
+      class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6 sm:p-8 md:p-10 lg:p-12"
+    >
+      <!-- Header Section -->
+      <header class="mb-8 pb-4 border-b border-gray-200">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-2">
+          计算机操作系统、进程与线程、环境变量介绍
+        </h1>
+        <p class="text-center text-gray-500 text-lg">深入理解计算机核心概念</p>
+      </header>
+
+      <!-- Table of Contents -->
+      <nav class="mb-10 p-6 bg-gray-50 rounded-xl border border-gray-200 toc">
+        <h3 class="text-xl font-bold mb-4 text-center text-gray-800">目录</h3>
+        <ul class="list-disc list-inside space-y-2 text-lg text-gray-600">
+          <li>
+            <a href="#os" class="font-medium hover:underline"
+              >1. 计算机操作系统</a
+            >
+          </li>
+          <li>
+            <a href="#process-thread" class="font-medium hover:underline"
+              >2. 进程与线程</a
+            >
+          </li>
+          <li>
+            <a href="#service-cron" class="font-medium hover:underline"
+              >3. 服务与例行任务</a
+            >
+          </li>
+          <li>
+            <a href="#shell-env" class="font-medium hover:underline"
+              >4. Shell与环境变量</a
+            >
+          </li>
+          <li>
+            <a href="#quiz" class="font-medium hover:underline">5. 思考题</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- 1. 计算机操作系统：你与电脑的“翻译官” -->
+      <section id="os" class="mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
+          1. 计算机操作系统
+        </h2>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          如果现在提起计算机操作系统，可能多数人的第一反应就是大名鼎鼎的
+          <strong class="text-indigo-600">Windows</strong
+          >，此外有些人可能也接触过
+          <strong class="text-indigo-600">macOS</strong> 或者
+          <strong class="text-indigo-600">Linux</strong>
+          的各类发行版（如：Ubuntu, Fedora, Manjaro, CentOS 等），它们都是<a
+            href="https://zh.wikipedia.org/wiki/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F"
+            target="_blank"
+            class="text-indigo-600 hover:underline"
+            >计算机操作系统</a
+          >。
+        </p>
+
+        <!-- 操作系统Logo展示 -->
+        <div
+          class="flex justify-center items-center space-x-8 mb-6 p-4 bg-gray-50 rounded-lg"
+        >
+          <div class="text-center">
+            <img
+              src="Ubuntu-Logo.png"
+              alt="Ubuntu Logo"
+              class="h-16 w-auto mx-auto mb-2"
+            />
+            <p class="text-sm text-gray-600">Ubuntu</p>
+          </div>
+          <div class="text-center">
+            <img
+              src="Debian-Logo.png"
+              alt="Debian Logo"
+              class="h-16 w-auto mx-auto mb-2"
+            />
+            <p class="text-sm text-gray-600">Debian</p>
+          </div>
+        </div>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          操作系统简史
+        </h3>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">最初</strong
+            >：计算机体积庞大，性能有限，多为特定目的服务，因此无需完整的操作系统。
+          </li>
+          <li>
+            <strong class="font-medium">发展</strong
+            >：随着计算机性能的提升和功能需求的日益复杂，操作系统开始成型，最初是为了帮助用户进行
+            <strong class="text-indigo-600">批处理操作</strong>。
+          </li>
+          <li>
+            <strong class="font-medium">现代</strong
+            >：操作系统逐渐形成庞大体系，成为联络一般用户和计算机底层设备的中介，让用户无需关心绝大多数底层设备，大大降低了使用学习成本。
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          现代操作系统的核心功能
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          现代个人计算机操作系统功能复杂，但总体来说，一直是用户与底层硬件交流的桥梁。
+        </p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700">
+          <li>
+            <strong class="font-medium">进程管理</strong
+            >：协调多个程序（进程）并发执行，确保CPU资源的合理分配。
+          </li>
+          <li>
+            <strong class="font-medium">内存管理</strong
+            >：合理分配和回收计算机有限的内存资源。
+          </li>
+          <li>
+            <strong class="font-medium">文件系统</strong
+            >：建立数据结构来存储和管理计算机上的文件。
+          </li>
+          <li>
+            <strong class="font-medium">网络通信</strong
+            >：实现与互联网上其他计算机的有效联络。
+          </li>
+          <li>
+            <strong class="font-medium">安全机制</strong
+            >：保护数据不被未授权访问，以及免受病毒攻击。
+          </li>
+          <li>
+            <strong class="font-medium">用户界面</strong
+            >：提供图形化用户界面，方便用户与计算机交互。
+          </li>
+          <li>
+            <strong class="font-medium">驱动程序</strong
+            >：管理与硬件直接交互的软件，发挥硬件功能。
+          </li>
+        </ul>
+      </section>
+
+      <!-- 2. 进程与线程：程序在电脑里的“生命” -->
+      <section class="mb-10 pt-6 border-t border-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
+          2. 进程与线程：程序在电脑里的“生命”
+        </h2>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          简单而不太严谨地来说，<strong class="text-indigo-600"
+            >进程就是已被载入的程序</strong
+          >：当我们启动一个程序的时候，操作系统会从硬盘中读取程序文件，将程序内容加载入内存中，之后CPU就会执行这个程序。
+        </p>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          线程：进程中的“执行单元”
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          如果说进程是操作系统分配资源的基本单位（好比一座工厂），那么<strong
+            class="text-indigo-600"
+            >线程</strong
+          >就是CPU调度的基本单位（工厂里的生产线）。一个进程可以包含一个或多个线程，它们共享进程的内存空间和资源，但每个线程有自己独立的执行栈和程序计数器。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">资源共享</strong
+            >：同一进程内的所有线程共享该进程的地址空间、全局变量和打开的文件，这使得线程间通信比进程间通信更高效、简单。
+          </li>
+          <li>
+            <strong class="font-medium">轻量级</strong
+            >：创建和切换线程的开销远小于进程，因此可以更高效地实现并发。
+          </li>
+          <li>
+            <strong class="font-medium">并发执行</strong
+            >：在多核CPU上，多线程可以真正地并行执行，从而显著提高程序性能。在单核CPU上，通过快速的线程切换，也能实现并发的“假象”。
+          </li>
+          <li>
+            <strong class="font-medium">应用场景</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>Web服务器使用多线程来同时处理多个客户端的请求。</li>
+              <li>
+                图形用户界面（GUI）程序使用一个线程负责界面响应，另一个线程执行耗时操作，避免界面卡顿。
+              </li>
+              <li>大型计算任务可以分解为多个子任务，交由多个线程并行处理。</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          进程与线程的核心区别
+        </h3>
+        <div class="overflow-x-auto mb-6">
+          <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  特性
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  进程
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  线程
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-6 py-4 font-medium text-gray-900">基本单位</td>
+                <td class="px-6 py-4 text-gray-700">资源分配的基本单位</td>
+                <td class="px-6 py-4 text-gray-700">CPU调度的基本单位</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-medium text-gray-900">资源开销</td>
+                <td class="px-6 py-4 text-gray-700">创建和销毁开销大</td>
+                <td class="px-6 py-4 text-gray-700">
+                  创建和销毁开销小（轻量级）
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-medium text-gray-900">内存空间</td>
+                <td class="px-6 py-4 text-gray-700">拥有独立的内存地址空间</td>
+                <td class="px-6 py-4 text-gray-700">共享所属进程的内存空间</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-medium text-gray-900">通信方式</td>
+                <td class="px-6 py-4 text-gray-700">
+                  复杂，需专门的IPC机制（如管道、套接字）
+                </td>
+                <td class="px-6 py-4 text-gray-700">
+                  简单，可直接读写共享数据（需注意同步）
+                </td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 font-medium text-gray-900">健壮性</td>
+                <td class="px-6 py-4 text-gray-700">
+                  一个进程崩溃不影响其他进程
+                </td>
+                <td class="px-6 py-4 text-gray-700">
+                  一个线程崩溃会导致整个进程崩溃
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          查看当前运行的进程
+        </h3>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">htop</strong
+            >：一个交互式工具，可以方便地查看当前运行的所有进程，以及系统CPU、内存占用情况。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                使用鼠标或F1-F10功能键操作，例如<strong class="font-medium"
+                  >F3 (Search)</strong
+                >、<strong class="font-medium">F4 (Filter)</strong>、<strong
+                  class="font-medium"
+                  >F5 (Tree/List)</strong
+                >。
+              </li>
+              <li>
+                [建议安装并运行
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >sudo apt install htop</code
+                >
+                来即时查看。]
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">ps (process status)</strong
+            >：常用的输出进程状态的命令行工具。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                直接调用
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">ps</code>
+                仅显示当前终端的相关进程。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >ps aux</code
+                >：显示所有进程。
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          进程标识符（PID）
+        </h3>
+        <p class="mb-6 leading-relaxed text-gray-700">
+          <strong class="text-indigo-600">PID</strong> (Process Identifier)
+          是一个数字，是进程的唯一标识。当用户想挂起、继续或终止进程时，可以使用PID作为索引。
+        </p>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          进程优先级与状态
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          为了让多个程序看起来“同时”执行，操作系统需要快速地在进程之间切换计算资源，这引入了进程优先级和进程状态的概念。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">优先级与nice值</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <strong class="font-medium">nice值越高</strong
+                >，代表一个进程对其他进程越“nice”（友好），对应的优先级也就越低。范围从-20（高优先级）到19（低优先级）。
+              </li>
+              <li>
+                可以使用
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >nice -n 10 vim</code
+                >
+                在运行时指定优先级，或
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >renice -n 10 -p 12345</code
+                >
+                重新指定优先级。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">进程状态</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <strong class="font-medium">R (Running)</strong
+                >：正在运行/可以立刻运行（包含就绪态）。
+              </li>
+              <li>
+                <strong class="font-medium">S (Sleeping)</strong
+                >：可被中断的睡眠状态，等待资源。
+              </li>
+              <li>
+                <strong class="font-medium">D (Disk Sleep)</strong
+                >：不可被中断的睡眠状态，通常阻塞在磁盘I/O上。
+              </li>
+              <li>
+                <strong class="font-medium">T (Traced/Stopped)</strong
+                >：被跟踪（调试中）或被挂起（如Ctrl + Z）。
+              </li>
+              <li>
+                <strong class="font-medium">Z (Zombie)</strong
+                >：僵尸进程，进程已结束但仍占用PID，等待父进程回收。
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          用户进程控制
+        </h3>
+
+        <!-- 信号处理流程图 -->
+        <div class="mb-6 text-center">
+          <img
+            src="signal_slide.png"
+            alt="信号处理流程图"
+            class="max-w-full h-auto mx-auto rounded-lg shadow-md border border-gray-200"
+          />
+          <p class="text-sm text-gray-600 mt-2">图：信号处理机制示意图</p>
+        </div>
+
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">信号</strong
+            >：Unix系统中进程间通信最古老的方式之一。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >kill -l</code
+                >：显示所有信号名称。
+              </li>
+              <li>
+                <strong class="font-medium">SIGTERM (15)</strong
+                >：标准的终止进程信号，程序可捕获并优雅退出。
+              </li>
+              <li>
+                <strong class="font-medium">SIGKILL (9)</strong
+                >：强制终止信号，无法被捕获或忽略。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">管道 (Pipe)</strong
+            >：用于有亲缘关系的进程（如父子进程）之间单向通信。例如
+            <code class="bg-gray-100 text-gray-800 px-1 rounded"
+              >ls -l | grep ".txt"</code
+            >，`ls`的输出通过管道成为了`grep`的输入。
+          </li>
+          <li>
+            <strong class="font-medium">套接字 (Socket)</strong
+            >：更通用的通信机制，不仅可用于同一台机器上的进程间通信，还可用于网络上不同机器间的进程通信。
+          </li>
+        </ul>
+
+        <h4 class="text-lg font-semibold mb-2 text-gray-800">用户进程控制</h4>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">发送信号</strong>：使用
+            <code class="bg-gray-100 text-gray-800 px-1 rounded">kill</code>
+            命令向进程发送信号。在htop中按<strong class="font-medium"
+              >K键</strong
+            >也可以方便地发送信号。
+          </li>
+          <li>
+            <strong class="font-medium">前后台切换</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                在命令末尾加
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">&amp;</code
+                >：将命令放到后台运行 (<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >./matmul &amp;</code
+                >)。
+              </li>
+              <li>
+                按 <strong class="font-medium">Ctrl + Z</strong>：发送
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >SIGTSTP</code
+                >
+                信号，使前台进程挂起。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">jobs</code
+                >：查看当前shell中挂起或后台运行的进程。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">fg %N</code
+                >：将代号为N的后台进程切换到前台。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">bg %N</code
+                >：将代号为N的挂起进程切换到后台继续运行。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">脱离终端</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <strong class="font-medium">nohup</strong>：<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >nohup command &amp;</code
+                >，使程序运行不受<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >SIGHUP</code
+                >（终端关闭信号）影响，输出默认重定向到<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >nohup.out</code
+                >。
+              </li>
+              <li>
+                <strong class="font-medium">tmux</strong
+                >：一个命令行多终端复用工具，解决SSH断开后程序停止的问题。详情可参考<a
+                  href="https://github.com/tmux/tmux/wiki"
+                  target="_blank"
+                  class="text-indigo-600 hover:underline"
+                  >官方Wiki</a
+                >。
+                <ul class="list-square list-inside ml-4 mt-1 space-y-1">
+                  <li>
+                    <strong class="font-medium">会话 (session)</strong>,
+                    <strong class="font-medium">窗口 (window)</strong>,
+                    <strong class="font-medium">面板 (pane)</strong
+                    >：tmux的组织结构。
+                  </li>
+                  <li>
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >tmux</code
+                    >：启动一个新的tmux会话。
+                  </li>
+                  <li>
+                    <strong class="font-medium">Ctrl + B</strong>
+                    是tmux的全局前缀命令。
+                  </li>
+                  <li>
+                    <strong class="font-medium">快捷键示例</strong>：<code
+                      class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >Ctrl+B %</code
+                    >
+                    (左右分屏),
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >Ctrl+B "</code
+                    >
+                    (上下分屏),
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >Ctrl+B d</code
+                    >
+                    (脱离会话),
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >Ctrl+B c</code
+                    >
+                    (新建窗口)。
+                  </li>
+                  <li>
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >tmux attach [-t session_name]</code
+                    >：重新连接到会话。
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          内存管理基础
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          操作系统的内存管理是保证程序正常运行的重要机制。现代操作系统引入了<strong
+            class="text-indigo-600"
+            >虚拟内存</strong
+          >的概念，让每个进程都认为自己拥有独立的完整内存空间。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">虚拟内存</strong
+            >：每个进程有自己的虚拟地址空间，操作系统将虚拟地址映射到实际的物理内存。这样既隔离了不同进程的内存，又使得程序可以使用比实际物理内存更大的地址空间。
+          </li>
+          <li>
+            <strong class="font-medium">栈 (Stack)</strong
+            >：用于存储函数调用的局部变量、返回地址等。栈的特点是后进先出（LIFO），当函数返回时，其局部变量会自动释放。
+          </li>
+          <li>
+            <strong class="font-medium">堆 (Heap)</strong
+            >：用于动态分配内存。程序在运行时可以根据需要在堆上申请和释放内存，但需要程序员手动管理（在C/C++中）或依赖垃圾回收机制（在Java、Python中）。
+          </li>
+          <li>
+            <strong class="font-medium">代码段与数据段</strong
+            >：代码段存储程序的机器指令，数据段存储全局变量和静态变量。
+          </li>
+        </ul>
+      </section>
+
+      <!-- 3. 服务与例行任务：幕后英雄与时间管理 -->
+      <section id="service-cron" class="mb-10 pt-6 border-t border-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
+          3. 服务与例行任务：幕后英雄与时间管理
+        </h2>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          服务（Daemon）
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          服务的特征意味着服务进程必须独立于用户的登录，不能随用户的退出而被终止。这类一直默默工作于后台的进程被称为<strong
+            class="text-indigo-600"
+            >守护进程 (daemon)</strong
+          >。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">服务管理</strong
+            >：目前绝大多数Linux发行版的init方案是<a
+              href="https://systemd.io/"
+              target="_blank"
+              class="text-indigo-600 hover:underline"
+              ><strong class="text-indigo-600">systemd</strong></a
+            >，其管理系统服务的命令是<strong class="text-indigo-600"
+              >systemctl</strong
+            >。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >systemctl status</code
+                >：一览系统服务运行情况。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >systemctl start/stop/restart/reload [unit]</code
+                >：开启/关闭/重启/重载服务。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >systemctl enable/disable [unit]</code
+                >：设置/取消服务开机自启。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >systemctl daemon-reload</code
+                >：重载systemd配置，在创建或修改服务文件后执行。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">自定义服务</strong
+            >：可以通过编写一个简单的<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >.service</code
+            >文件将其注册为systemd服务，通常存放在<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >/etc/systemd/system/</code
+            >目录下。
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          例行性任务
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          指基于时间的一次或多次周期性定时任务。在Linux中，主要通过<code
+            class="bg-gray-100 text-gray-800 px-1 rounded"
+            >at</code
+          >和<code class="bg-gray-100 text-gray-800 px-1 rounded">crontab</code
+          >实现。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">at 命令</strong>：负责<strong
+              class="text-indigo-600"
+              >单次</strong
+            >计划任务。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >at now + 1min</code
+                >：一分钟后执行命令，命令从标准输入读取，或用
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >at -f script.sh now</code
+                >。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">at -l</code
+                >：列出任务；<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >at -r &lt;编号&gt;</code
+                >：删除任务。
+              </li>
+              <li>
+                <strong class="font-medium">注意</strong>：<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >at</code
+                >默认将标准输出和标准错误以邮件形式发送给用户。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">crontab 命令</strong>：负责<strong
+              class="text-indigo-600"
+              >周期性</strong
+            >任务设置。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >crontab -e</code
+                >：编辑当前用户的定时任务配置文件。
+              </li>
+              <li>
+                <strong class="font-medium">配置格式</strong
+                >：每一行代表一个任务，前半段为时间，后半段为shell执行命令。
+                <pre
+                  class="bg-gray-100 text-gray-800 p-3 rounded-md mt-2 text-sm overflow-x-auto"
+                ><code># 分   时   日   月   星期  | 命令
+* * * * * echo "hello" &gt;&gt; ~/count # 每分钟输出 hello 到家目录下 count 文件</code></pre>
+              </li>
+              <li>
+                可以通过
+                <a
+                  href="https://crontab.guru/"
+                  target="_blank"
+                  class="text-indigo-600 hover:underline"
+                  >https://crontab.guru/</a
+                >
+                网站解析时间字段。
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 4. Shell与环境变量：你的命令行“魔法棒” -->
+      <section class="mb-10 pt-6 border-t border-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
+          4. Shell与环境变量：你的命令行“魔法棒”
+        </h2>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          什么是Shell
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          <strong class="text-indigo-600">Shell</strong>
+          是Linux的命令解释程序，是用户和内核之间的接口。除了作为命令解释程序外，Shell同时还提供了一个可支持强大脚本语言的程序环境。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">Bash (Bourne Again Shell)</strong
+            >：大部分Linux系统的默认Shell，是Bourne Shell的扩展。可以参考<a
+              href="https://tldp.org/LDP/abs/html/"
+              target="_blank"
+              class="text-indigo-600 hover:underline"
+              >高级Bash脚本指南</a
+            >深入学习。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <strong class="font-medium">定制环境</strong>：通过修改<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >.bash_profile</code
+                >、<code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >.bashrc</code
+                >等文件配置环境变量。
+              </li>
+              <li>
+                <strong class="font-medium">别名 (alias)</strong
+                >：用短命令代替长命令（<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >alias ll='ls -alF'</code
+                >）。
+                <ul class="list-square list-inside ml-4 mt-1 space-y-1">
+                  <li>
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >alias</code
+                    >：查看目前存在的别名。
+                  </li>
+                  <li>
+                    <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                      >type [命令]</code
+                    >：检查命令是否被alias。
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          Bash脚本的运行
+        </h3>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">在指定的Shell下执行</strong>：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >bash script.sh</code
+            >。
+          </li>
+          <li>
+            <strong class="font-medium">设置为可执行后直接运行</strong>：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >chmod a+x script.sh</code
+            >
+            后
+            <code class="bg-gray-100 text-gray-800 px-1 rounded"
+              >./script.sh</code
+            >。
+          </li>
+          <li>
+            <strong class="font-medium">`.` 或 `source` 命令</strong
+            >：在当前shell中执行脚本，脚本中的变量赋值、函数定义、目录切换等变化都会在当前shell中生效（如激活Python虚拟环境：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >. venv/bin/activate</code
+            >）。
+          </li>
+          <li>
+            <strong class="font-medium"
+              >Shebang (<code class="bg-gray-100 text-gray-800 px-1 rounded"
+                >#!</code
+              >)</strong
+            >：脚本文件首行的<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >#!/bin/bash</code
+            >指定了该脚本的解释器。
+          </li>
+          <li>
+            <strong class="font-medium">命令行多命令操作</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">;</code
+                >：按顺序执行。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >&amp;&amp;</code
+                >：前一个成功才执行后一个。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">||</code
+                >：前一个失败才执行后一个。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">&amp;</code
+                >：后台方式执行命令。
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          Shell变量
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          Shell支持在程序中使用变量，但它将任何变量值都当作字符串。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">用户自定义变量</strong>：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >name=value</code
+            >
+            (等号两边不允许有空格)。引用时使用<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >$name</code
+            >或<code class="bg-gray-100 text-gray-800 px-1 rounded"
+              >${name}</code
+            >。
+          </li>
+          <li>
+            <strong class="font-medium">环境变量</strong
+            >：系统为每个用户建立的默认工作环境，由一组环境变量定义。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">HOME</code
+                >：用户主目录。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >LOGNAME</code
+                >：登录用户名。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">PATH</code
+                >：命令搜索路径，路径以冒号分割。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">PWD</code
+                >：用户当前工作目录路径。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >export A=1</code
+                >：定义环境变量，在当前shell及其子进程中有效。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">env</code
+                >：列出所有已定义的环境变量。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">位置变量</strong>：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >$0</code
+            >（程序名），<code class="bg-gray-100 text-gray-800 px-1 rounded"
+              >$1, $2, ...</code
+            >（参数）。
+          </li>
+          <li>
+            <strong class="font-medium">特殊变量</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">$#</code
+                >：命令行上的参数个数。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">$?</code
+                >：最后命令的退出代码（0表示成功）。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">$$</code
+                >：当前进程的PID。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">$*</code
+                >：命令行所有参数构成的一个字符串。
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          变量输入与输出
+        </h3>
+        <ul class="list-disc list-inside space-y-2 text-gray-700">
+          <li>
+            <strong class="font-medium">输入</strong>：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >read</code
+            >
+            命令读取用户输入，并将内容赋值给变量。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >read -p "Enter your name: " name</code
+                >
+              </li>
+              <li>
+                建议加上<code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >-r</code
+                >参数，避免反斜杠被视为转义符。
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">输出</strong>：<code
+              class="bg-gray-100 text-gray-800 px-1 rounded"
+              >echo</code
+            >
+            和
+            <code class="bg-gray-100 text-gray-800 px-1 rounded">printf</code>
+            命令。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded">echo</code
+                >：输出变量信息。<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >-n</code
+                >不输出换行，<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >-e</code
+                >解析转义字符（如<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >\n</code
+                >）。
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >printf</code
+                >：类似于C语言中的<code
+                  class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >printf()</code
+                >函数，支持格式化输出。
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          文件权限管理
+        </h3>
+        <p class="mb-4 leading-relaxed text-gray-700">
+          Linux系统中的每个文件和目录都有特定的权限设置，决定了谁可以对其进行什么操作。
+        </p>
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
+          <li>
+            <strong class="font-medium">三种权限类型</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li><strong>读 (r)</strong>：可以查看文件内容或列出目录内容</li>
+              <li>
+                <strong>写 (w)</strong>：可以修改文件内容或在目录中创建/删除文件
+              </li>
+              <li>
+                <strong>执行 (x)</strong>：可以运行文件（如果是程序）或进入目录
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">三种用户类型</strong>：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li><strong>用户 (u)</strong>：文件的所有者</li>
+              <li><strong>组 (g)</strong>：文件所属的用户组</li>
+              <li><strong>其他 (o)</strong>：系统中的其他用户</li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">权限表示</strong>：如
+            <code class="bg-gray-100 text-gray-800 px-1 rounded"
+              >-rwxr-xr--</code
+            >，第一位是文件类型（-表示文件，d表示目录），后面每三位分别表示用户、组、其他的权限。
+          </li>
+          <li>
+            <strong class="font-medium">修改权限</strong>：使用
+            <code class="bg-gray-100 text-gray-800 px-1 rounded">chmod</code>
+            命令。
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >chmod 755 file</code
+                >：设置文件权限为rwxr-xr-x
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >chmod +x script.sh</code
+                >：给文件添加执行权限
+              </li>
+              <li>
+                <code class="bg-gray-100 text-gray-800 px-1 rounded"
+                  >chmod u+w,g-r file</code
+                >：给用户添加写权限，移除组的读权限
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 5. 思考题 -->
+      <section id="quiz" class="mb-10 pt-6 border-t border-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
+          5. 思考题
+        </h2>
+        <ul class="list-disc list-inside space-y-3 text-gray-700">
+          <li>
+            <strong class="font-medium">Ctrl + C</strong
+            >：尝试描述在终端运行程序时，用户按下 Ctrl + C 后发生的事情。
+          </li>
+          <li>
+            <strong class="font-medium"
+              >SIGKILL (kill -9) 可以杀死所有进程吗？</strong
+            >
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>
+                状态为 <strong class="font-medium">D (Disk sleep)</strong> 与
+                <strong class="font-medium">Z (Zombie)</strong> 的进程收到
+                SIGKILL 信号后会发生什么？
+              </li>
+              <li>
+                可以向 <strong class="font-medium">1号进程 init</strong> 发送
+                SIGKILL 信号吗？发送之后会发生什么？
+              </li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">nohup 合适吗？</strong> 某同学使用
+            Python 写了一个小网站，他准备登录服务器后用
+            <code class="bg-gray-100 text-gray-800 px-1 rounded">nohup</code>
+            来运行他的网站。尝试指出这么做可能的问题。
+          </li>
+          <li>
+            <strong class="font-medium">多人使用的 tmux</strong
+            >：在实验室的机器中，可能出现多个人同时使用同一个 Linux
+            账号的场景。此时如果这几个人同时使用 tmux
+            的话，会出现互相影响的情况。请给出一种解决方案。
+          </li>
+          <li>
+            <strong class="font-medium">服务日志</strong>：给出使用
+            <code class="bg-gray-100 text-gray-800 px-1 rounded">systemd</code>
+            相关工具输出以下内容的命令：
+            <ul class="list-circle list-inside ml-4 mt-1 space-y-1">
+              <li>某个服务的日志</li>
+              <li>某个正在运行的服务正在输出的日志</li>
+              <li>系统正在输出的日志</li>
+              <li>上一次启动到关机的所有日志</li>
+            </ul>
+          </li>
+          <li>
+            <strong class="font-medium">耗时的定时任务</strong
+            >：如果一个定时任务的执行时间超过了
+            <code class="bg-gray-100 text-gray-800 px-1 rounded">crontab</code>
+            中两次任务执行的时间间隔，会发生什么事情？如果用
+            <code class="bg-gray-100 text-gray-800 px-1 rounded"
+              >systemd timer</code
+            >，能否避免这个问题？
+          </li>
+        </ul>
+      </section>
+
+      <footer
+        class="text-center text-gray-500 text-sm mt-10 pt-6 border-t border-gray-200"
+      >
+        <p>&copy; 2025 计算机操作系统基础知识</p>
+      </footer>
+    </div>
+    <!-- Prism.js for code highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
+</html>
