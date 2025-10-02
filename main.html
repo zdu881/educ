@@ -96,6 +96,9 @@
           <li>
             <a href="#quiz" class="font-medium hover:underline">5. 思考题</a>
           </li>
+          <li>
+            <a href="#references" class="font-medium hover:underline">6. 参考资料</a>
+          </li>
         </ul>
       </nav>
 
@@ -167,15 +170,15 @@
         </p>
         <ul class="list-disc list-inside space-y-2 text-gray-700">
           <li>
-            <strong class="font-medium">进程管理</strong
+            <strong class="font-medium text-indigo-600">进程管理</strong
             >：协调多个程序（进程）并发执行，确保CPU资源的合理分配。
           </li>
           <li>
-            <strong class="font-medium">内存管理</strong
+            <strong class="font-medium text-indigo-600">内存管理</strong
             >：合理分配和回收计算机有限的内存资源。
           </li>
           <li>
-            <strong class="font-medium">文件系统</strong
+            <strong class="font-medium text-indigo-600">文件系统</strong
             >：建立数据结构来存储和管理计算机上的文件。
           </li>
           <li>
@@ -187,15 +190,15 @@
             >：保护数据不被未授权访问，以及免受病毒攻击。
           </li>
           <li>
-            <strong class="font-medium">用户界面</strong
+            <strong class="font-medium text-indigo-600">用户界面</strong
             >：提供图形化用户界面，方便用户与计算机交互。
           </li>
           <li>
-            <strong class="font-medium">驱动程序</strong
+            <strong class="font-medium text-indigo-600">驱动程序</strong
             >：管理与硬件直接交互的软件，发挥硬件功能。
           </li>
         </ul>
-      </section>
+            </section>
 
       <!-- 2. 进程与线程：程序在电脑里的“生命” -->
       <section class="mb-10 pt-6 border-t border-gray-200">
@@ -590,6 +593,19 @@
             <strong class="font-medium">堆 (Heap)</strong
             >：用于动态分配内存。程序在运行时可以根据需要在堆上申请和释放内存，但需要程序员手动管理（在C/C++中）或依赖垃圾回收机制（在Java、Python中）。
           </li>
+        </ul>
+
+        <!-- 内存布局示意图 -->
+        <div class="mb-6 text-center">
+          <img
+            src="StackAndHeap.png"
+            alt="栈与堆内存布局示意图"
+            class="max-w-full h-auto mx-auto rounded-lg shadow-md border border-gray-200"
+          />
+          <p class="text-sm text-gray-600 mt-2">图：进程内存布局 - 栈与堆的关系</p>
+        </div>
+
+        <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
           <li>
             <strong class="font-medium">代码段与数据段</strong
             >：代码段存储程序的机器指令，数据段存储全局变量和静态变量。
@@ -735,7 +751,7 @@
       <!-- 4. Shell与环境变量：你的命令行“魔法棒” -->
       <section class="mb-10 pt-6 border-t border-gray-200">
         <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
-          4. Shell与环境变量：你的命令行“魔法棒”
+          4. Shell与环境变量“”
         </h2>
 
         <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
@@ -743,7 +759,7 @@
         </h3>
         <p class="mb-4 leading-relaxed text-gray-700">
           <strong class="text-indigo-600">Shell</strong>
-          是Linux的命令解释程序，是用户和内核之间的接口。除了作为命令解释程序外，Shell同时还提供了一个可支持强大脚本语言的程序环境。
+          是命令解释程序，是用户和内核之间的接口。除了作为命令解释程序外，Shell同时还提供了一个可支持强大脚本语言的程序环境。
         </p>
         <ul class="list-disc list-inside space-y-2 mb-6 text-gray-700">
           <li>
@@ -1104,6 +1120,32 @@
           </li>
         </ul>
       </section>
+
+      <!-- 6. 参考资料 -->
+      <section id="references" class="mb-10 pt-6 border-t border-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-indigo-700">
+          6. 参考资料
+        </h2>
+        <p class="mb-6 leading-relaxed text-gray-700">
+          以下是一些优质的学习资源，可以帮助您深入理解操作系统相关概念：
+        </p>
+
+        <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-gray-800">
+          在线教程与文档
+        </h3>
+        <ul class="list-disc list-inside space-y-3 mb-6 text-gray-700">
+          <li>
+            <a 
+              href="https://101.lug.ustc.edu.cn/" 
+              target="_blank" 
+              class="text-indigo-600 hover:underline font-medium"
+            >Linux 101 - 中科大 LUG</a>
+            - 全面的 Linux 入门教程，涵盖基础概念到高级应用
+          </li>
+
+        </ul>
+
+
 
       <footer
         class="text-center text-gray-500 text-sm mt-10 pt-6 border-t border-gray-200"
