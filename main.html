@@ -1119,6 +1119,107 @@
             >，能否避免这个问题？
           </li>
         </ul>
+
+        <div class="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-200">
+          <h3 class="text-xl font-bold mb-4 text-blue-800 flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            思考题参考答案
+          </h3>
+          <div class="space-y-6">
+            <!-- 答案 1 -->
+            <div class="bg-white p-4 rounded-lg border border-blue-100">
+              <h4 class="font-semibold text-gray-800 mb-2">1. Ctrl + C 的工作机制</h4>
+              <div class="text-gray-700 space-y-2">
+                <p><strong>答案：</strong>当用户按下 Ctrl + C 时，会发生以下过程：</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                  <li>终端驱动程序检测到 Ctrl + C 组合键</li>
+                  <li>内核向前台进程组发送 <code class="bg-gray-100 px-1 rounded">SIGINT</code> 信号（信号编号2）</li>
+                  <li>进程收到信号后，默认行为是终止执行</li>
+                  <li>程序可以通过信号处理函数捕获 SIGINT 信号，执行清理工作后优雅退出</li>
+                  <li>如果程序忽略或屏蔽了 SIGINT 信号，则不会被终止</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 答案 2 -->
+            <div class="bg-white p-4 rounded-lg border border-blue-100">
+              <h4 class="font-semibold text-gray-800 mb-2">2. SIGKILL 的限制</h4>
+              <div class="text-gray-700 space-y-2">
+                <p><strong>答案：</strong>SIGKILL 并不能杀死所有进程：</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                  <li><strong>D 状态进程</strong>：处于不可中断睡眠状态，通常在等待磁盘I/O，无法响应任何信号，包括 SIGKILL</li>
+                  <li><strong>Z 状态进程</strong>：僵尸进程已经死亡，只是等待父进程回收，发送信号无效，需要父进程调用 wait() 系统调用</li>
+                  <li><strong>init 进程</strong>：可以向 1号进程发送 SIGKILL，但内核会忽略对 init 进程的 SIGKILL 和 SIGTERM 信号，防止系统崩溃</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 答案 3 -->
+            <div class="bg-white p-4 rounded-lg border border-blue-100">
+              <h4 class="font-semibold text-gray-800 mb-2">3. nohup 运行网站的问题</h4>
+              <div class="text-gray-700 space-y-2">
+                <p><strong>答案：</strong>使用 nohup 运行网站存在以下问题：</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                  <li><strong>进程管理困难</strong>：难以控制进程的启动、停止、重启</li>
+                  <li><strong>日志管理混乱</strong>：所有输出都重定向到 nohup.out，难以分类和轮转</li>
+                  <li><strong>资源监控缺失</strong>：无法方便地监控进程状态和资源使用</li>
+                  <li><strong>自动重启缺失</strong>：进程崩溃后无法自动重启</li>
+                  <li><strong>更好的方案</strong>：应使用 systemd 服务、Docker 容器或进程管理器（如 PM2、Supervisor）</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 答案 4 -->
+            <div class="bg-white p-4 rounded-lg border border-blue-100">
+              <h4 class="font-semibold text-gray-800 mb-2">4. 多人共享 tmux 解决方案</h4>
+              <div class="text-gray-700 space-y-2">
+                <p><strong>答案：</strong>可以通过以下方法避免多人使用 tmux 的冲突：</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                  <li><strong>命名会话</strong>：每人创建带有自己标识的会话名 <code class="bg-gray-100 px-1 rounded">tmux new -s username</code></li>
+                  <li><strong>Socket 分离</strong>：使用不同的 socket 文件 <code class="bg-gray-100 px-1 rounded">tmux -S /tmp/tmux-username</code></li>
+                  <li><strong>用户目录</strong>：在各自的用户目录下创建 tmux socket</li>
+                  <li><strong>权限控制</strong>：设置 socket 文件权限，防止其他用户访问</li>
+                  <li><strong>最佳实践</strong>：建议为每个用户分配独立的系统账号</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 答案 5 -->
+            <div class="bg-white p-4 rounded-lg border border-blue-100">
+              <h4 class="font-semibold text-gray-800 mb-2">5. systemd 日志查看命令</h4>
+              <div class="text-gray-700 space-y-2">
+                <p><strong>答案：</strong>使用 journalctl 命令查看各种日志：</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                  <li><strong>某个服务的日志</strong>：<code class="bg-gray-100 px-1 rounded">journalctl -u service-name</code></li>
+                  <li><strong>实时跟踪服务日志</strong>：<code class="bg-gray-100 px-1 rounded">journalctl -u service-name -f</code></li>
+                  <li><strong>系统实时日志</strong>：<code class="bg-gray-100 px-1 rounded">journalctl -f</code></li>
+                  <li><strong>上次启动到关机的日志</strong>：<code class="bg-gray-100 px-1 rounded">journalctl --boot=-1</code> 或 <code class="bg-gray-100 px-1 rounded">journalctl --boot=0</code></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 答案 6 -->
+            <div class="bg-white p-4 rounded-lg border border-blue-100">
+              <h4 class="font-semibold text-gray-800 mb-2">6. 长时间定时任务的问题</h4>
+              <div class="text-gray-700 space-y-2">
+                <p><strong>答案：</strong>定时任务执行时间过长会导致：</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                  <li><strong>crontab 行为</strong>：会启动新的任务实例，导致多个相同任务并行运行，可能造成资源冲突</li>
+                  <li><strong>解决方案</strong>：
+                    <ul class="list-square list-inside ml-4 mt-1 space-y-1">
+                      <li>使用文件锁防止重复执行</li>
+                      <li>脚本开头检查是否已有同名进程在运行</li>
+                    </ul>
+                  </li>
+                  <li><strong>systemd timer 优势</strong>：可以配置 <code class="bg-gray-100 px-1 rounded">Persistent=true</code> 和适当的冲突处理策略，避免任务重复执行</li>
+                  <li><strong>推荐配置</strong>：对于长时间任务，使用 systemd timer 搭配合适的服务配置更为可靠</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- 6. 参考资料 -->
